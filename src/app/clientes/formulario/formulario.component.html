@@ -1,0 +1,106 @@
+<po-page [p-title]="'Cadastro de Cliente'" style="height: 100vh; display: flex; flex-direction: column; background-color: #f9f9f9; overflow: hidden;">
+ 
+    <form (ngSubmit)="salvar()" 
+    style="
+      max-width: 800px; 
+      margin: 24px auto; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 24px; 
+      flex-grow: 1; 
+      padding: 16px; 
+      overflow-y: auto; 
+      height: 100%;
+    ">
+
+    <!-- Formulário Básico -->
+    <po-dynamic-form
+      [p-fields]="camposBasicos"
+      [p-value]="cliente"
+      (p-valueChange)="atualizarCliente($any($event))"
+      style="background: #fff; padding: 16px; border-radius: 8px; border: 1px solid #e0e0e0;"
+    ></po-dynamic-form>
+
+    <!-- Telefones -->
+    <section style="background: #fff; padding: 16px; border-radius: 8px; border: 1px solid #e0e0e0;">
+      <h3 style="margin-bottom: 16px; color: #333; font-size: 1.25rem; font-weight: 500;">Telefones</h3>
+      <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px;">
+        <input
+          type="text"
+          [(ngModel)]="novoTelefone"
+          (ngModelChange)="novoTelefone = telefoneMask($event)"
+          (keydown)="limitarDigitosTelefone($event)"
+          name="novoTelefone"
+          placeholder="Digite o telefone"
+          required
+          style="
+            flex-grow: 1; 
+            padding: 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            font-size: 1rem;
+            background: #f9f9f9;
+          "
+        />
+        <po-button p-label="Adicionar" (click)="adicionarTelefone()" p-type="button"></po-button>
+      </div>
+
+      <div style="max-height: 150px; overflow-y: auto; border: 1px solid #ddd; border-radius: 6px; padding: 8px;">
+        <po-table
+          *ngIf="colunasTelefone?.length && cliente.telefones?.length"
+          [p-items]="cliente.telefones"
+          [p-columns]="colunasTelefone"
+          [p-actions]="acoesTelefone"
+        ></po-table>
+      </div>
+    </section>
+
+    <!-- Endereços -->
+    <section style="background: #fff; padding: 16px; border-radius: 8px; border: 1px solid #e0e0e0;">
+      <h3 style="margin-bottom: 16px; color: #333; font-size: 1.25rem; font-weight: 500;">Endereços</h3>
+      <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px;">
+        <input
+          [(ngModel)]="novoEndereco.cep"
+          name="cep"
+          placeholder="00000-000"
+          maxlength="9"
+          (ngModelChange)="novoEndereco.cep = cepMask($event)"
+          style="
+            flex-grow: 0; 
+            width: 150px;
+            padding: 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            font-size: 1rem;
+            background: #f9f9f9;
+          "
+        />
+        <po-button p-icon="po-icon-search" (click)="buscarCep()" p-type="button" p-tooltip="Buscar endereço pelo CEP"></po-button>
+      </div>
+
+      <po-dynamic-form
+        [p-fields]="camposEndereco"
+        [p-value]="novoEndereco"
+        (p-valueChange)="novoEndereco = $event"
+      ></po-dynamic-form>
+
+      <po-button p-label="Adicionar Endereço" (click)="adicionarEndereco()" p-type="button" style="margin-top: 16px;"></po-button>
+
+      <div style="max-height: 150px; overflow-y: auto; border: 1px solid #ddd; border-radius: 6px; padding: 8px;">
+        <po-table
+          *ngIf="colunasEndereco?.length && cliente.enderecos?.length"
+          [p-items]="cliente.enderecos"
+          [p-columns]="colunasEndereco"
+          [p-actions]="acoesEndereco"
+        ></po-table>
+      </div>
+    </section>
+
+    <!-- Botões Salvar / Cancelar -->
+    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 0px; margin-bottom: 20px;">
+  <po-button p-label="Salvar" p-type="submit" (click)="salvar()"></po-button>
+  <po-button p-label="Cancelar" (click)="cancelar()" p-type="button"></po-button>
+</div>
+
+  </form>
+</po-page>

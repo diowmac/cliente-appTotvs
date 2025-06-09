@@ -1,0 +1,48 @@
+<po-page-default
+  p-title="Clientes"
+  p-primary-action-label="Novo"
+  (p-primary-action)="novo()"
+>
+  <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+    <input
+      type="text"
+      placeholder="Pesquisar clientes"
+      [(ngModel)]="filtro"
+      (ngModelChange)="aplicarFiltro()"
+      style="flex: 1; padding: 0.5rem;"
+    />
+    <button
+      (click)="novo()"
+      style="padding: 0 1rem; cursor: pointer;"
+      type="button"
+    >
+      Novo
+    </button>
+  </div>
+
+  <po-table
+    *ngIf="columns?.length && clientesFiltrados?.length"
+    [p-items]="clientesFiltrados"
+    [p-columns]="columns"
+    [p-actions]="actions"
+  >
+  </po-table>
+
+<po-modal
+  #modalConfirmacao
+  p-title="Confirmação"
+  p-size="sm"
+  [p-primary-action]="acaoPrimaria"
+  [p-secondary-action]="acaoSecundaria"
+>
+  <p>
+    Deseja realmente excluir o cliente
+    <strong>{{ clienteSelecionado?.nome }}</strong>
+    (CPF: <strong>{{ clienteSelecionado?.cpf }}</strong>)?
+  </p>
+</po-modal>
+
+
+
+
+</po-page-default>
